@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: echo-statefulset
+spec:
+  # serviceName 필수
+  serviceName: echo
+  replicas: 3
+  selector:
+      matchLabels:
+      app: echo
+      tier: app
+  template:
+      metadata:
+      labels:
+          app: echo
+          tier: app
+      spec:
+      containers:
+          - name: echo
+          image: ghcr.io/subicura/echo:v1
+          ports:
+              - containerPort: 8080
+              protocol: TCP
+#            volumeMounts:
+#                - name: data
+#                mountPath: /data
+#    volumeClaimTemplates:
+#        - metadata:
+#            name: data
+#        spec:
+#            accessModes: [ "ReadWriteOnce" ]
+#            resources:
+#            requests:
+#                storage: 1Gi

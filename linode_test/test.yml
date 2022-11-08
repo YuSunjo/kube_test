@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: cavyos-deployment
   name: cavyos-deployment
 spec:
   replicas: 1
@@ -17,6 +19,7 @@ spec:
   template:
     metadata:
       labels:
+        # selector 동일한 값으로 설정해야 함
         app: cavyos-label
         tier: app
     spec:

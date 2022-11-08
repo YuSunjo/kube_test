@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-curl-succ
+spec:
+  backoffLimit: 3
+  # ttlSecondsAfterFinished: 10
+  # activeDeadlineSeconds: 30
+  template:
+    # 병렬 실행
+    completionMode: 3
+    spec:
+      containers:
+        - name: curl
+          image: curlimages/curl:7.76.1
+          command: ["curl", "http://echo:8080"]
+        # 꼭 필요(default - always 인데 Job 과 맞지 않아 실패가 됨)
+        restartPolicy: Never

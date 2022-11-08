@@ -1,0 +1,22 @@
+# replicas 가 없음 - 노드마다 한개로 고정
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: echo-daemonset
+  labels:
+    app: echo
+spec:
+  selector:
+    matchLabels:
+      app: echo
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+        - name: echo
+          image: ghcr.io/subicura/echo:v1
+          ports:
+            - containerPort: 8080
+              protocol: TCP
