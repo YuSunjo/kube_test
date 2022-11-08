@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cavyos-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cavyos-label
+      tier: app
+  minReadySeconds: 5
+#  strategy:
+#    type: RollingUpdate
+#    rollingUpdate:
+#      maxSurge: 3
+#      maxUnavailable: 3
+  template:
+    metadata:
+      labels:
+        app: cavyos-label
+        tier: app
+    spec:
+      containers:
+        - name: cavyos
+          image: tnswh2023/kube_test:test
+          imagePullPolicy: Always
+#          command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+          ports:
+            - containerPort: 8887
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+#          livenessProbe:
+#            httpGet:
+#              path: /ping
+#              port: 8887
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cavyos-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: cavyos-label
+  ports:
+    - port: 8887
+      protocol: TCP
