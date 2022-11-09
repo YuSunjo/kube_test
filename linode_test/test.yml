@@ -46,8 +46,15 @@ metadata:
   name: cavyos-service
 spec:
   type: LoadBalancer
+  # type: externalName
+  # externalName: cavyos-service
+  # type: ClusterIp
+  # cluseterIP: None # headless
   selector:
     app: cavyos-label
   ports:
     - port: 8887
       protocol: TCP
+
+### headless service
+# statefulset 에서 사용
