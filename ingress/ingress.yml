@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: echo.example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              # serviceName 을 통해서 매칭이 됨
+              serviceName: echo
+              servicePort: 80
+          -path: /ip
+           backend:
+              serviceName: echo2
+              servicePort: 80
+    - host: counter.example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: counter
+              servicePort: 80
+    - host: redis.example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: redis
+              servicePort: 6379
+    - host: external.example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: external-data
+              servicePort: 80
+    - host: lb-chk-ip.example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: lb-chk-ip
+              servicePort: 80
