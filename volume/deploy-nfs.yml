@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: deploy-nfs
+  labels:
+    app: deploy-nfs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+    app: deploy-nfs
+  template:
+    metadata:
+    labels:
+      app: deploy-nfs
+    spec:
+    containers:
+      - name: host-mon
+      image: sysnet4admin/chk-log
+      volumeMounts:
+      - name: nfs-vol
+        mountPath: /audit
+    volumes:
+    - name: nfs-directory
+      nfs:
+        server: 192.168.1.10
+        path: /nfs_shared/nfs-vol
