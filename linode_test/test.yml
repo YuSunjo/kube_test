@@ -5,7 +5,7 @@ metadata:
     app: cavyos-deployment
   name: cavyos-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: cavyos-label
@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: cavyos
-          image: tnswh2023/kube_test:test
+          image: tnswh2023/kube_test:latest
           imagePullPolicy: Always
 #          command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
           ports:
