@@ -1,0 +1,35 @@
+### https://www.linode.com/docs/guides/how-to-deploy-nginx-ingress-on-linode-kubernetes-engine/
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ittok-dev-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-dev"
+spec:
+  tls:
+  - hosts:
+      - test.debug.one
+    secretName: ittalk-dev-tls
+  rules:
+    - host: test.debug.one
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: ittalk-java
+                port:
+                  number: 80
+#    - host: shop.example.com
+#      http:
+#        paths:
+#          - pathType: Prefix
+#            path: "/"
+#            backend:
+#              service:
+#                name: hello-two
+#                port:
+#                  number: 80

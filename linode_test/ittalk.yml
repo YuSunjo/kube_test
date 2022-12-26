@@ -1,27 +1,69 @@
-kind: Deployment
+#kind: Deployment
+#apiVersion: apps/v1
+#metadata:
+#  name: ittalk-java
+#  namespace: default
+#spec:
+#  replicas: 2
+#  selector:
+#    matchLabels:
+#      app: ittalk-java-label
+#      tier: app
+#  template:
+#    metadata:
+#      creationTimestamp: null
+#      labels:
+#        app: ittalk-java-label
+#        tier: app
+#    spec:
+#      containers:
+#        - name: ittalk
+#          image: ittalk/ittalk_api:test_1
+##          readinessProbe:
+##            httpGet:
+##              path: /hello
+##              port: 8080
+##            initialDelaySeconds: 5
+##            timeoutSeconds: 2 # Default 1
+##            periodSeconds: 5 # Defaults 10
+##            failureThreshold: 1 # Defaults 3
+#          imagePullPolicy: Always
+#          ports:
+#            - containerPort: 8080
+#          resources:
+#            requests:
+#              cpu: 10m
+#            limits:
+#              cpu: 10m
+#      nodeSelector:
+#        ittok: backend
+
+---
+kind: DaemonSet
 apiVersion: apps/v1
 metadata:
-  name: ittalTest-java
+  name: ittalk-java
   namespace: default
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: ittalTest-java-label
+      app: ittalk-java-label
       tier: app
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: ittalTest-java-label
+        app: ittalk-java-label
         tier: app
     spec:
       containers:
-        - name: ittalTest
-          image: ittalTest/ittalTest_api:latest
+        - name: ittalk
+          image: ittalk/ittalk_api:test_1
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+      nodeSelector:
+        lke.linode.com/pool-id: '129715'
 
 
 ---
@@ -29,14 +71,37 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ittalTest-java
-  annotations:
-    service.beta.kubernetes.io/linode-loadbalancer-preserve: "true"
+  name: ittalk-java
+#  annotations:
+#    service.beta.kubernetes.io/linode-loadbalancer-preserve: "true"
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
-    app: ittalTest-java-label
+    app: ittalk-java-label
   ports:
-    - port: 443
+    - port: 80
       targetPort: 8080
       protocol: TCP
+
+#---
+#apiVersion: autoscaling/v2beta1
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: ittalk-java
+#spec:
+#    scaleTargetRef:
+#        apiVersion: apps/v1
+#        kind: Deployment
+#        name: ittalk-java
+#    minReplicas: 2
+#    maxReplicas: 10
+#    metrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        targetAverageUtilization: 50
+#    - type: Resource
+#      resource:
+#          name: memory
+#          targetAverageUtilization: 50
+
